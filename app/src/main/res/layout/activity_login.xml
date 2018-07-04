@@ -5,14 +5,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.android.thejournalist.LoginActivity">
+    tools:context="com.example.android.thejournalist.Activities.LoginActivity">
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:contentDescription="background"
         android:scaleType="centerCrop"
-        android:src="@drawable/background"
+        android:src="@drawable/bg_login"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -64,9 +64,9 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:text="Login"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/et_email" />
             </android.support.constraint.ConstraintLayout>
 

@@ -2,13 +2,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.android.thejournalist.Tab1Fragment">
+    tools:context="com.example.android.thejournalist.Fragments.GeneralFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ListView
+        android:id="@+id/lv_general"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hello"
-        android:gravity="center"/>
+        android:divider="@null">
+
+    </ListView>
 
 </FrameLayout>

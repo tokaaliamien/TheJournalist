@@ -1,4 +1,4 @@
-package com.example.android.thejournalist;
+package com.example.android.thejournalist.Activities;
 
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -11,6 +11,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.example.android.thejournalist.Adapters.ViewPagerAdapter;
+import com.example.android.thejournalist.Fragments.GeneralFragment;
+import com.example.android.thejournalist.Fragments.Tab2Fragment;
+import com.example.android.thejournalist.R;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -41,10 +46,9 @@ public class MainActivity extends AppCompatActivity
 
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        viewPagerAdapter.addFragment(new Tab1Fragment(), "TAB 1");
+        viewPagerAdapter.addFragment(new GeneralFragment(), "General");
         viewPagerAdapter.addFragment(new Tab2Fragment(), "TAB 2");
         viewPager.setAdapter(viewPagerAdapter);
-
 
     }
 
@@ -104,4 +108,6 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
 }

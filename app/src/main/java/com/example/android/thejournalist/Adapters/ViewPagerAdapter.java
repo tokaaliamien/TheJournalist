@@ -1,4 +1,4 @@
-package com.example.android.thejournalist;
+package com.example.android.thejournalist.Adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,7 +11,7 @@ import java.util.List;
  * Created by Toka on 2018-04-08.
  */
 
-class ViewPagerAdapter extends FragmentPagerAdapter {
+public class ViewPagerAdapter extends FragmentPagerAdapter {
     private final List<Fragment> mFragmentList = new ArrayList<>();
     private final List<String> mFragmentTitleList = new ArrayList<>();
 
