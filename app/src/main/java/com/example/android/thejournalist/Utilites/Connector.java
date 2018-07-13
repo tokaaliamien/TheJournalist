@@ -21,7 +21,7 @@ public class Connector {
     private Uri uri;
 
     Connector() {
-        uri = Uri.parse(Constants.BASE_URL)
+        uri = Uri.parse(Constants.SOURCES_BASE_URL)
                 .buildUpon()
                 .appendQueryParameter(Constants.COUNTRY_PARAM, "us")
                 .appendQueryParameter(Constants.API_KEY_PARAM, Constants.API_KEY)

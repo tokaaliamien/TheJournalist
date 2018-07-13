@@ -1,13 +1,166 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.android.thejournalist.Fragments.DetailsFragment">
+    android:fillViewport="true"
+    tools:context="com.example.android.thejournalist.Fragments.DetailsFragment"
+    tools:showIn="@layout/activity_details">
 
-
-    <TextView
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="details" />
+        android:background="@android:color/white">
 
-</FrameLayout>
+        <ImageView
+            android:id="@+id/iv_news_details_image"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/bg_login" />
+
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/costraint_news_titles"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/iv_news_details_image">
+
+            <!--     <TextView
+                     android:id="@+id/line1"
+                     style="@style/vertical_line"
+                     app:layout_constraintBottom_toBottomOf="@+id/tv_news_details_contery"
+                     app:layout_constraintRight_toLeftOf="@+id/tv_news_details_contery"
+                     app:layout_constraintTop_toTopOf="@+id/tv_news_details_contery" />-->
+
+            <TextView
+                android:id="@+id/tv_news_details_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:text="Ary News Ary News"
+                android:textColor="@color/colorAccent"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_from"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="From"
+                app:layout_constraintStart_toStartOf="@+id/tv_news_details_title"
+                app:layout_constraintTop_toBottomOf="@+id/tv_news_details_title" />
+
+            <TextView
+                android:id="@+id/tv_news_details_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="Al gazera"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_from"
+                app:layout_constraintStart_toEndOf="@+id/tv_from"
+                app:layout_constraintTop_toTopOf="@+id/tv_from" />
+
+            <TextView
+                android:id="@+id/tv_by"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="by"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_from"
+                app:layout_constraintStart_toEndOf="@+id/tv_news_details_name"
+                app:layout_constraintTop_toTopOf="@+id/tv_from" />
+
+            <TextView
+                android:id="@+id/tv_news_details_author"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="James Bond"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_news_details_name"
+                app:layout_constraintStart_toEndOf="@+id/tv_by"
+                app:layout_constraintTop_toTopOf="@+id/tv_news_details_name" />
+
+            <TextView
+                android:id="@+id/tv_published_at"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Published at"
+                app:layout_constraintStart_toStartOf="@+id/tv_from"
+                app:layout_constraintTop_toBottomOf="@+id/tv_from" />
+
+            <TextView
+                android:id="@+id/tv_news_details_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="2018/155/2"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/tv_published_at"
+                app:layout_constraintTop_toBottomOf="@+id/tv_from" />
+
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab_news_details_fav"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="16dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/ic_action_fav_border"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.84"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tv_news_details_title"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab_news_details_link"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/ic_link"
+                app:layout_constraintEnd_toEndOf="@+id/fab_news_details_fav"
+                app:layout_constraintTop_toBottomOf="@+id/fab_news_details_fav" />
+
+        </android.support.constraint.ConstraintLayout>
+
+
+        <TextView
+            android:id="@+id/tv_news_details_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8sp"
+            android:text="kljdflkejflwajfwl;l;akg;akg;wagkwkgowgkwkgowegwo555555gkwogkwekgowkgpowkgokwogkowgkogkogkogkogkgokgowkga"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/costraint_news_titles" />
+
+
+        <!--        <View
+                    android:id="@+id/line2"
+                    android:layout_width="1dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="16dp"
+                    android:background="@color/colorPrimaryDark"
+                    app:layout_constraintBottom_toBottomOf="@+id/tv_news_details_description"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tv_news_details_description" />-->
+
+
+    </android.support.constraint.ConstraintLayout>
+
+
+</ScrollView>
+

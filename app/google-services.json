@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "537417536749",
+    "firebase_url": "https://the-jornalist.firebaseio.com",
+    "project_id": "the-jornalist",
+    "storage_bucket": "the-jornalist.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:537417536749:android:4a9e6dce5a2335a7",
+        "android_client_info": {
+          "package_name": "com.example.android.thejournalist"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "537417536749-lebqsjtc0elnh0utt33vbe4opir34v90.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.android.thejournalist",
+            "certificate_hash": "fc666923344106ae6d3de05548477d6836aa4c69"
+          }
+        },
+        {
+          "client_id": "537417536749-qrp0girkqa92j7ceeo2iu7abc0pr01vt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYcoBTCco5YytNT2jcUjhBv7oaUG7mgw8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "537417536749-qrp0girkqa92j7ceeo2iu7abc0pr01vt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

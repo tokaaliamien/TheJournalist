@@ -21,9 +21,36 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activities.MainActivity"
+            android:name=".Activities.HomeActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activities.DetailsActivity"
+            android:label="@string/title_activity_details"
+            android:parentActivityName=".Activities.HomeActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.thejournalist.Activities.HomeActivity" />
+        </activity>
+        <activity
+            android:name=".Activities.WebPageActivity"
+            android:label="@string/title_web_page_details"
+            android:parentActivityName=".Activities.DetailsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.thejournalist.Activities.DetailsActivity" />
+        </activity>
+        <activity
+            android:name=".Activities.FavortiesActivity"
+            android:label="Favorite News"
+            android:parentActivityName=".Activities.HomeActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.thejournalist.Activities.HomeActivity" />
+        </activity>
     </application>
 
 </manifest>

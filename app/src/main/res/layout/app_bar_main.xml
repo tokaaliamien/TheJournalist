@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.android.thejournalist.Activities.MainActivity">
+    tools:context="com.example.android.thejournalist.Activities.HomeActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -20,5 +20,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_main" />
+    <include
+        android:id="@+id/container"
+        layout="@layout/activity_tabbed" />
 </android.support.design.widget.CoordinatorLayout>

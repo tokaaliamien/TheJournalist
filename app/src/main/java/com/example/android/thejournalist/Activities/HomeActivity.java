@@ -1,5 +1,6 @@
 package com.example.android.thejournalist.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -12,21 +13,25 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.android.thejournalist.Adapters.ViewPagerAdapter;
-import com.example.android.thejournalist.Fragments.GeneralFragment;
-import com.example.android.thejournalist.Fragments.Tab2Fragment;
+import com.example.android.thejournalist.Adapters.TabsAdapter;
 import com.example.android.thejournalist.R;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener{
+public class HomeActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
+    private TabsAdapter tabsAdapter;
+    private ViewPager mViewPager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        //Navigation bar
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -36,21 +41,18 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        ViewPager viewPager = findViewById(R.id.view_pager);
+        //Tabs
+        tabsAdapter = new TabsAdapter(getSupportFragmentManager());
 
-        final TabLayout tabLayout = findViewById(R.id.layout_tab);
-        tabLayout.setupWithViewPager(viewPager);
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 1"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 2"));
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        mViewPager = (ViewPager) findViewById(R.id.view_pager);
+        mViewPager.setAdapter(tabsAdapter);
 
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
-        viewPagerAdapter.addFragment(new GeneralFragment(), "General");
-        viewPagerAdapter.addFragment(new Tab2Fragment(), "TAB 2");
-        viewPager.setAdapter(viewPagerAdapter);
-
+        mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
     }
+
 
     @Override
     public void onBackPressed() {
@@ -90,10 +92,12 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
+        if (id == R.id.nav_home) {
+            //Do nothing
+        } else if (id == R.id.nav_fav) {
+            Intent intent = new Intent(HomeActivity.this, FavortiesActivity.class);
+            startActivity(intent);
+            finish();
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
@@ -108,6 +112,5 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
 
 }

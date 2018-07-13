@@ -7,18 +7,19 @@
     android:layout_height="match_parent"
     tools:context="com.example.android.thejournalist.Activities.LoginActivity">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:contentDescription="background"
-        android:scaleType="centerCrop"
-        android:src="@drawable/bg_login"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+    <!--    <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="background"
+            android:scaleType="centerCrop"
+            android:layout_gravity="bottom"
+            android:src="@drawable/ic_login_screen"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />-->
 
     <android.support.v7.widget.CardView
         android:id="@+id/cardView"

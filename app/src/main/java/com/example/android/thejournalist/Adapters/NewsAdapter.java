@@ -34,10 +34,10 @@ public class NewsAdapter extends ArrayAdapter<News> {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View itemView = inflater.inflate(R.layout.item_view, parent, false);
         TextView nameTextView = itemView.findViewById(R.id.tv_item_name);
-        TextView descriptionTextView = itemView.findViewById(R.id.tv_item_description);
+        TextView titleTextView = itemView.findViewById(R.id.tv_item_title);
 
-        nameTextView.setText(newsArrayList.get(position).getName());
-        descriptionTextView.setText(newsArrayList.get(position).getDescription());
+        nameTextView.setText(newsArrayList.get(position).getSource().getName());
+        titleTextView.setText(newsArrayList.get(position).getTitle());
         return itemView;
     }
 }

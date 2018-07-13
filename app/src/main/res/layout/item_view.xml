@@ -1,68 +1,100 @@
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<?xml version="1.0" encoding="utf-8"?><!--<android.support.v7.widget.CardView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="16dp"
-    android:layout_marginTop="8dp">
+    app:cardCornerRadius="16dp"
+    android:layout_margin="16dp">-->
 
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <View
+        android:id="@+id/line2"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:background="@color/colorPrimaryDark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_item_title"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="16dp">
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:text="Tesla Stock's Terrible Week: A Buying Opportunity?"
+        android:textColor="@color/colorAccent"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toRightOf="@+id/line2"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:orientation="vertical">
+    <TextView
+        android:id="@+id/tv_item_by"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:text="By"
+        app:layout_constraintStart_toStartOf="@+id/tv_item_title"
+        app:layout_constraintTop_toTopOf="@+id/tv_item_name"
+        tools:layout_conversion_absoluteHeight="19dp"
+        tools:layout_conversion_absoluteWidth="336dp" />
 
-            <TextView
-                android:id="@+id/tv_item_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:text="Al gazera"
-                android:textColor="@color/colorAccent"
-                android:textSize="16dp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:layout_conversion_absoluteHeight="22dp"
-                tools:layout_conversion_absoluteWidth="68dp" />
+    <TextView
+        android:id="@+id/tv_item_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:ellipsize="end"
+        android:text="Fool.com"
+        app:layout_constraintStart_toEndOf="@+id/tv_item_by"
+        app:layout_constraintTop_toBottomOf="@+id/tv_item_title" />
 
-            <TextView
-                android:id="@+id/tv_item_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:text="I have a TextView that I want to limit characters of it Actually, I can do this but the thing that I'm looking for is how to add three dots (...) at the end of string. This one shows the text has continue. This is my XML but there is no dots although it limit my textlsdkdlfjsdkfjslfjskfjlsfjlsdlfjdsf"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_item_name"
-                tools:layout_conversion_absoluteHeight="19dp"
-                tools:layout_conversion_absoluteWidth="336dp" />
+    <!--<TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/button"
+        android:padding="8dp"
+        android:text="Read More"
+        android:textColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_item_description" />-->
 
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/button"
-                android:padding="8dp"
-                android:text="Read More"
-                android:textColor="@android:color/white"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_item_description" />
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Read More"
+        android:textColor="@color/colorPrimaryDark"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_item_name"
+        app:layout_constraintEnd_toStartOf="@+id/iv_arrow"
+        app:layout_constraintTop_toTopOf="@+id/tv_item_name" />
+
+    <ImageView
+        android:id="@+id/iv_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_arrow"
+        app:layout_constraintBottom_toBottomOf="@+id/textView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView2" />
 
 
-        </android.support.constraint.ConstraintLayout>
+</android.support.constraint.ConstraintLayout>
 
+    <!--
     </android.support.v7.widget.CardView>
-</FrameLayout>
+    -->
