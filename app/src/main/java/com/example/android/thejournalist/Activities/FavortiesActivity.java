@@ -13,12 +13,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.android.thejournalist.Adapters.NewsAdapter;
 import com.example.android.thejournalist.Models.News;
 import com.example.android.thejournalist.R;
 import com.example.android.thejournalist.Utilites.Helper;
+import com.example.android.thejournalist.Utilites.NavDrawer;
 import com.example.android.thejournalist.Utilites.SharedPreference;
 
 import java.util.ArrayList;
@@ -29,6 +31,8 @@ public class FavortiesActivity extends AppCompatActivity implements NavigationVi
     TextView noNewsTextView;
     NewsAdapter newsAdapter;
     FloatingActionButton deleteFavFloatingButton;
+    ProgressBar progressBar;
+    NavDrawer navDrawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,16 +52,20 @@ public class FavortiesActivity extends AppCompatActivity implements NavigationVi
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        navDrawer = new NavDrawer(this);
+
         listView = findViewById(R.id.lv_news);
         noNewsTextView = findViewById(R.id.tv_no_news);
         deleteFavFloatingButton = findViewById(R.id.fab_delete_all_fav);
+        progressBar = findViewById(R.id.pb_list);
+        progressBar.setVisibility(View.GONE);
 
         getFavoriteNews();
 
         deleteFavFloatingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sharedPreference.removeAll(FavortiesActivity.this);
+                sharedPreference.removeAll();
                 Helper.displayToast(FavortiesActivity.this, "Favorites deleted");
                 getFavoriteNews();
             }
@@ -66,7 +74,7 @@ public class FavortiesActivity extends AppCompatActivity implements NavigationVi
     }
 
     private void getFavoriteNews() {
-        sharedPreference = new SharedPreference();
+        sharedPreference = new SharedPreference(this);
         ArrayList<News> favoritesArrayList = getSharedPreferences();
         if (favoritesArrayList == null || favoritesArrayList.size() <= 0) {
             noNewsTextView.setVisibility(View.VISIBLE);
@@ -79,7 +87,7 @@ public class FavortiesActivity extends AppCompatActivity implements NavigationVi
     }
 
     private void setNews(final ArrayList<News> favoritesArrayList) {
-        newsAdapter = new NewsAdapter(this, R.layout.item_view, favoritesArrayList);
+        newsAdapter = new NewsAdapter(this, R.layout.news_item_view, favoritesArrayList);
         listView.setAdapter(newsAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -97,7 +105,7 @@ public class FavortiesActivity extends AppCompatActivity implements NavigationVi
     }
 
     private ArrayList<News> getSharedPreferences() {
-        ArrayList<News> favoritesArrayList = sharedPreference.getFavorites(this);
+        ArrayList<News> favoritesArrayList = sharedPreference.getFavorites();
         return favoritesArrayList;
     }
 
@@ -108,21 +116,7 @@ public class FavortiesActivity extends AppCompatActivity implements NavigationVi
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_home) {
-            Intent intent = new Intent(FavortiesActivity.this, HomeActivity.class);
-            startActivity(intent);
-            finish();
-        } else if (id == R.id.nav_fav) {
-            //Do nothing
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }
+        navDrawer.onNavItemClick(id);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

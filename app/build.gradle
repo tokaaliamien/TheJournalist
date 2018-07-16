@@ -40,7 +40,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:16.0.2'
     implementation 'com.firebaseui:firebase-ui-auth:4.0.0'
     implementation 'com.google.android.gms:play-services-auth:15.0.1'
-
+    compile 'com.github.mukeshsolanki:country-picker-android:1.2.4'
 
 
 }

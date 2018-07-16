@@ -2,8 +2,6 @@ package com.example.android.thejournalist.Models;
 
 import java.io.Serializable;
 
-import static com.example.android.thejournalist.Utilites.Helper.compare;
-
 
 public class News implements Serializable {
     private Source source;
@@ -13,7 +11,7 @@ public class News implements Serializable {
     private String url;
     private String urlToImage;
     private String publishedAt;
-    private String id;
+    private String id = "";
 
     public News() {
     }
@@ -33,15 +31,19 @@ public class News implements Serializable {
     public void setTitle(String title) {
         this.title = title;
     }
+
     public String getDescription() {
         return description;
     }
+
     public void setDescription(String description) {
         this.description = description;
     }
+
     public String getUrl() {
         return url;
     }
+
     public void setUrl(String url) {
         this.url = url;
     }
@@ -78,26 +80,13 @@ public class News implements Serializable {
         this.id = id;
     }
 
-    //TODO fix equals function
     @Override
     public boolean equals(Object obj) {
         News newsObject = (News) obj;
-        if (!compare(this.getAuthor(), newsObject.getAuthor()))
-            return false;
-        else if (!compare(this.getTitle(), newsObject.getTitle()))
-            return false;
-        else if (!compare(this.getDescription(), newsObject.getDescription()))
-            return false;
-        else if (!compare(this.getUrlToImage(), newsObject.getUrlToImage()))
-            return false;
-        else if (!compare(this.getPublishedAt(), newsObject.getPublishedAt()))
-            return false;
-        else if (!compare(this.getUrl(), newsObject.getUrl()))
-            return false;
-        else if (!this.getSource().equals(newsObject.getSource()))
-            return false;
-        else
+        if (this.getId().equals(newsObject.getId()))
             return true;
+        else
+            return false;
     }
 
 

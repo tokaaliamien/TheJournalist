@@ -2,12 +2,14 @@ package com.example.android.thejournalist.Fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,10 +17,13 @@ import com.bumptech.glide.Glide;
 import com.example.android.thejournalist.Activities.WebPageActivity;
 import com.example.android.thejournalist.Models.News;
 import com.example.android.thejournalist.R;
-import com.example.android.thejournalist.Utilites.Firebase;
+import com.example.android.thejournalist.Utilites.Constants;
 import com.example.android.thejournalist.Utilites.Helper;
 import com.example.android.thejournalist.Utilites.SharedPreference;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 
 import static com.example.android.thejournalist.Utilites.Helper.isNullOrEmpty;
 
@@ -28,11 +33,12 @@ import static com.example.android.thejournalist.Utilites.Helper.isNullOrEmpty;
 public class DetailsFragment extends Fragment {
     TextView descriptionTextView, titleTextView, authorTextView, nameTextView,
             dateTextView, fromTextView, byTextView, publishedAtTextView;
-    FloatingActionButton linkFloatingButton, favFloatingButton;
+    ImageButton linkButton, favButton, shareButton;
     ImageView imageView;
     SharedPreference sharedPreference;
-    Firebase firebase;
     boolean isFavorite;
+    News news;
+    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
     public DetailsFragment() {
     }
@@ -40,13 +46,12 @@ public class DetailsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        News news = (News) getActivity().getIntent().getExtras().get("news");
+        news = (News) getActivity().getIntent().getExtras().get("news");
 
         View view = inflater.inflate(R.layout.fragment_details, container, false);
 
-        sharedPreference = new SharedPreference();
-        firebase = new Firebase();
-        isFavorite = sharedPreference.isFavorite(getContext(), news);
+        sharedPreference = new SharedPreference(getContext());
+        isFavorite = sharedPreference.isFavorite(news);
 
         descriptionTextView = view.findViewById(R.id.tv_news_details_description);
         titleTextView = view.findViewById(R.id.tv_news_details_title);
@@ -60,8 +65,10 @@ public class DetailsFragment extends Fragment {
 
         imageView = view.findViewById(R.id.iv_news_details_image);
 
-        linkFloatingButton = view.findViewById(R.id.fab_news_details_link);
-        favFloatingButton = view.findViewById(R.id.fab_news_details_fav);
+        linkButton = view.findViewById(R.id.btn_news_details_link);
+        favButton = view.findViewById(R.id.btn_news_details_fav);
+        shareButton = view.findViewById(R.id.btn_news_details_share);
+
 
         setNewsData(news);
 
@@ -116,10 +123,10 @@ public class DetailsFragment extends Fragment {
         setFavFloatingButtonIcon();
 
         if (isNullOrEmpty(news.getUrl())) {
-            linkFloatingButton.setVisibility(View.GONE);
+            linkButton.setVisibility(View.GONE);
         } else {
-            linkFloatingButton.setVisibility(View.VISIBLE);
-            linkFloatingButton.setOnClickListener(new View.OnClickListener() {
+            linkButton.setVisibility(View.VISIBLE);
+            linkButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                 /*Fragment webViewFragment = new WebPageFragment();
@@ -134,24 +141,21 @@ public class DetailsFragment extends Fragment {
                 }
             });
         }
-        favFloatingButton.setOnClickListener(new View.OnClickListener() {
+        favButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (isFavorite) {
-                    sharedPreference.removeFavorite(getContext(), news);
-                    firebase.removeFavorite(FirebaseAuth.getInstance().getCurrentUser(), news);
-                    isFavorite = false;
-                    setFavFloatingButtonIcon();
-                    Helper.displayToast(getActivity(), "Removed from favorites");
-
+                    removeFavorite();
                 } else {
-                    String newsId = firebase.addFavorite(FirebaseAuth.getInstance().getCurrentUser(), news);
-                    news.setId(newsId);
-                    sharedPreference.addFavorite(getContext(), news);
-                    isFavorite = true;
-                    setFavFloatingButtonIcon();
-                    Helper.displayToast(getActivity(), "Added to favorites");
+                    addFavorite();
                 }
+            }
+        });
+
+        shareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
 
@@ -160,9 +164,31 @@ public class DetailsFragment extends Fragment {
 
     private void setFavFloatingButtonIcon() {
         if (isFavorite)
-            favFloatingButton.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_action_fav));
+            favButton.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_action_fav));
         else
-            favFloatingButton.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_action_fav_border));
+            favButton.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_action_fav_border));
+    }
+
+    public void addFavorite() {
+        DatabaseReference newFavoriteNewsRef = Constants.favoritesDatabaseReference.child(currentUser.getUid()).push();
+        news.setId(newFavoriteNewsRef.getKey());
+        newFavoriteNewsRef.setValue(news, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                sharedPreference.addFavorite(news);
+                isFavorite = true;
+                setFavFloatingButtonIcon();
+                Helper.displayToast(getActivity(), "Added to favorites");
+            }
+        });
+    }
+
+    public void removeFavorite() {
+        Constants.favoritesDatabaseReference.child(currentUser.getUid()).child(news.getId()).removeValue();
+        sharedPreference.removeFavorite(news);
+        isFavorite = false;
+        setFavFloatingButtonIcon();
+        Helper.displayToast(getActivity(), "Removed from favorites");
     }
 
 

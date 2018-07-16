@@ -14,15 +14,17 @@ import java.util.Arrays;
  */
 
 public class SharedPreference {
-
+    private static final String COUNTRY = "COUNTRY";
     private static final String PREFERENCE_NAME = "THE_JOURNALIST";
     private static final String FAVORITES = "FAVORITE_NEWS";
+    private Context context;
 
-    public SharedPreference() {
+    public SharedPreference(Context context) {
         super();
+        this.context = context;
     }
 
-    public void saveFavorites(Context context, ArrayList<News> favNewsArrayList) {
+    public void saveFavorites(ArrayList<News> favNewsArrayList) {
         SharedPreferences sharedPreferences;
         SharedPreferences.Editor editor;
         sharedPreferences = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
@@ -34,31 +36,32 @@ public class SharedPreference {
         editor.commit();
     }
 
-    public boolean addFavorite(Context context, News news) {
-        ArrayList<News> favoritesArrayList = getFavorites(context);
-        if (isFavorite(context, news))
+    public boolean addFavorite(News news) {
+        ArrayList<News> favoritesArrayList = getFavorites();
+        if (isFavorite(news))
             return false;
         if (favoritesArrayList == null)
             favoritesArrayList = new ArrayList<>();
 
         favoritesArrayList.add(news);
-        saveFavorites(context, favoritesArrayList);
+        saveFavorites(favoritesArrayList);
         return true;
     }
 
-    public boolean removeFavorite(Context context, News news) {
-        ArrayList<News> favoritesArrayList = getFavorites(context);
+    public boolean removeFavorite(News news) {
+        ArrayList<News> favoritesArrayList = getFavorites();
 
         if (favoritesArrayList != null) {
             favoritesArrayList.remove(news);
-            saveFavorites(context, favoritesArrayList);
+            saveFavorites(favoritesArrayList);
             return true;
         }
         return false;
     }
 
-    public boolean isFavorite(Context context, News news) {
-        ArrayList<News> favoritesArrayList = getFavorites(context);
+    //TODO make it a map to reduce time complexity
+    public boolean isFavorite(News news) {
+        ArrayList<News> favoritesArrayList = getFavorites();
         if (favoritesArrayList != null) {
             for (News i : favoritesArrayList) {
                 if (i.equals(news))
@@ -68,9 +71,8 @@ public class SharedPreference {
         return false;
     }
 
-    public ArrayList<News> getFavorites(Context context) {
+    public ArrayList<News> getFavorites() {
         SharedPreferences sharedPreferences;
-        SharedPreferences.Editor editor;
         sharedPreferences = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
 
         if (sharedPreferences.contains(FAVORITES)) {
@@ -84,11 +86,30 @@ public class SharedPreference {
             return null;
     }
 
-    public boolean removeAll(Context context) {
+    public boolean removeAll() {
         SharedPreferences sharedPreferences;
         sharedPreferences = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         return editor.remove(FAVORITES).commit();
+    }
+
+    public String getCountry() {
+        SharedPreferences sharedPreferences;
+        sharedPreferences = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
+        if (sharedPreferences.contains(COUNTRY)) {
+            String country = sharedPreferences.getString(COUNTRY, null);
+            return country;
+        } else
+            return null;
+    }
+
+    public void setCountry(String country) {
+        SharedPreferences sharedPreferences;
+        sharedPreferences = context.getSharedPreferences(PREFERENCE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor;
+        editor = sharedPreferences.edit();
+        editor.putString(COUNTRY, country);
+        editor.commit();
     }
 
 }

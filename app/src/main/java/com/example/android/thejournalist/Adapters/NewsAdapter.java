@@ -32,7 +32,7 @@ public class NewsAdapter extends ArrayAdapter<News> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View itemView = inflater.inflate(R.layout.item_view, parent, false);
+        View itemView = inflater.inflate(R.layout.news_item_view, parent, false);
         TextView nameTextView = itemView.findViewById(R.id.tv_item_name);
         TextView titleTextView = itemView.findViewById(R.id.tv_item_title);
 
