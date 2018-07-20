@@ -8,9 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -19,28 +16,17 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.android.thejournalist.Activities.DetailsActivity;
 import com.example.android.thejournalist.Adapters.CountryAdapter;
 import com.example.android.thejournalist.Adapters.NewsAdapter;
 import com.example.android.thejournalist.Models.Country;
 import com.example.android.thejournalist.Models.News;
 import com.example.android.thejournalist.R;
+import com.example.android.thejournalist.Utilites.CallBack;
 import com.example.android.thejournalist.Utilites.Constants;
 import com.example.android.thejournalist.Utilites.Helper;
 import com.example.android.thejournalist.Utilites.SharedPreference;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.example.android.thejournalist.Utilites.VolleyRequest;
 
 import java.util.ArrayList;
 
@@ -51,13 +37,13 @@ import java.util.ArrayList;
 public class HomeFragment extends Fragment {
     private static final String ARG_SECTION_NUMBER = "section_number";
     private static final String LOG_TAG = HomeFragment.class.getSimpleName();
-    RequestQueue requestQueue;
     private ListView listView;
     private TextView noNewsTextView;
     private ArrayList<News> newsArrayList = new ArrayList<>();
     private ProgressBar progressBar;
     private String country;
     private SharedPreference sharedPreference;
+    private VolleyRequest volleyRequest;
 
 
     public HomeFragment() {
@@ -84,6 +70,7 @@ public class HomeFragment extends Fragment {
         listView = rootView.findViewById(R.id.lv_news);
         noNewsTextView = rootView.findViewById(R.id.tv_no_news);
         progressBar = rootView.findViewById(R.id.pb_list);
+        progressBar.setVisibility(View.VISIBLE);
 
         sharedPreference = new SharedPreference(getContext());
 
@@ -98,35 +85,29 @@ public class HomeFragment extends Fragment {
     }
 
     private void sendRequest(String countryCode) {
+        String category = "general";
         switch (getArguments().getInt(ARG_SECTION_NUMBER)) {
             case 1: {
                 //general
-                requestData("general", countryCode);
+                category = "general";
                 break;
             }
             case 2: {
                 //Tech
-                requestData("technology", countryCode);
+                category = "technology";
                 break;
             }
             case 3: {
                 //science
-                requestData("science", countryCode);
+                category = "science";
                 break;
             }
             case 4: {
                 //sports
-                requestData("sports", countryCode);
+                category = "sports";
                 break;
             }
         }
-    }
-
-    public void requestData(String category, String countryCode) {
-        progressBar.setVisibility(View.VISIBLE);
-        newsArrayList.clear();
-
-        requestQueue = Volley.newRequestQueue(getContext());
 
         Uri uri = Uri.parse(Constants.TOP_HEADLINES_BASE_URL)
                 .buildUpon()
@@ -135,60 +116,26 @@ public class HomeFragment extends Fragment {
                 .appendQueryParameter(Constants.API_KEY_PARAM, Constants.API_KEY)
                 .build();
 
-        Helper.displayLog(LOG_TAG, "URL: " + uri);
-        StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                uri.toString(),
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-
-                        Helper.displayLog(LOG_TAG, "worked");
-                        JSONObject jObject = null;
-                        try {
-                            progressBar.setVisibility(View.GONE);
-                            jObject = new JSONObject(response);
-                            JSONArray jsonarray = new JSONArray(jObject.getString("articles"));
-                            for (int i = 0; i < jsonarray.length(); i++) {
-
-                                JSONObject jsonobject = jsonarray.getJSONObject(i);
-
-                                JsonParser parser = new JsonParser();
-                                JsonElement jsonElement = parser.parse(jsonobject.toString());
-                                Gson gson = new Gson();
-                                News news = gson.fromJson(jsonElement, News.class);
-                                newsArrayList.add(news);
-                                Helper.displayLog(LOG_TAG, newsArrayList.get(i).getSource().getName());
-                            }
-
-                            Helper.displayLog(LOG_TAG, "size= " + newsArrayList.size());
-                            if (newsArrayList != null && newsArrayList.size() > 0) {
-                                noNewsTextView.setVisibility(View.GONE);
-                                listView.setVisibility(View.VISIBLE);
-                                setNews(newsArrayList);
-                            } else {
-                                noNewsTextView.setVisibility(View.VISIBLE);
-                                listView.setVisibility(View.GONE);
-                            }
-
-                        } catch (JSONException e) {
-                            progressBar.setVisibility(View.GONE);
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        progressBar.setVisibility(View.GONE);
-                        Helper.displayLog(LOG_TAG, "VolleyError" + error);
-                    }
+        volleyRequest = new VolleyRequest(getContext());
+        volleyRequest.requestData(uri, new CallBack() {
+            @Override
+            public void onCallback(ArrayList<News> resultArrayList) {
+                newsArrayList = resultArrayList;
+                if (newsArrayList != null && newsArrayList.size() > 0) {
+                    noNewsTextView.setVisibility(View.GONE);
+                    listView.setVisibility(View.VISIBLE);
+                    setNews(newsArrayList);
+                } else {
+                    noNewsTextView.setVisibility(View.VISIBLE);
+                    listView.setVisibility(View.GONE);
                 }
-        );
-        requestQueue.add(stringRequest);
-
+            }
+        });
     }
 
+
     private void setNews(final ArrayList<News> newsArrayList) {
+        progressBar.setVisibility(View.GONE);
         NewsAdapter newsAdapter = new NewsAdapter(getContext(), R.layout.news_item_view, newsArrayList);
         listView.setAdapter(newsAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -210,17 +157,16 @@ public class HomeFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         progressBar.setVisibility(View.GONE);
-        requestQueue.cancelAll(new RequestQueue.RequestFilter() {
-            @Override
-            public boolean apply(Request<?> request) {
-                return true;
-            }
-        });
+        volleyRequest.cancelAll();
     }
-
+/*
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.main, menu);
+        SearchManager searchManager=(SearchManager)getActivity().getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView=(SearchView)menu.findItem(R.id.action_search).getActionView();
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getActivity().getComponentName()));
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -239,7 +185,7 @@ public class HomeFragment extends Fragment {
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
     private void showCountryDialog() {
         final ArrayList<Country> countries = new ArrayList<>();

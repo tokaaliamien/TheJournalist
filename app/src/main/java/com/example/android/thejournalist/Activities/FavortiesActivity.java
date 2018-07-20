@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.example.android.thejournalist.Adapters.NewsAdapter;
 import com.example.android.thejournalist.Models.News;
 import com.example.android.thejournalist.R;
+import com.example.android.thejournalist.Utilites.CallBack;
 import com.example.android.thejournalist.Utilites.Helper;
 import com.example.android.thejournalist.Utilites.NavDrawer;
 import com.example.android.thejournalist.Utilites.SharedPreference;
@@ -26,6 +27,7 @@ import com.example.android.thejournalist.Utilites.SharedPreference;
 import java.util.ArrayList;
 
 public class FavortiesActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    private static final String LOG_TAG = FavortiesActivity.class.getSimpleName();
     SharedPreference sharedPreference;
     ListView listView;
     TextView noNewsTextView;
@@ -52,13 +54,15 @@ public class FavortiesActivity extends AppCompatActivity implements NavigationVi
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        navDrawer = new NavDrawer(this);
+        navDrawer = new NavDrawer(this, navigationView);
 
         listView = findViewById(R.id.lv_news);
         noNewsTextView = findViewById(R.id.tv_no_news);
         deleteFavFloatingButton = findViewById(R.id.fab_delete_all_fav);
         progressBar = findViewById(R.id.pb_list);
-        progressBar.setVisibility(View.GONE);
+
+        progressBar.setVisibility(View.VISIBLE);
+        noNewsTextView.setText("You don't have favorite news yet");
 
         getFavoriteNews();
 
@@ -75,18 +79,34 @@ public class FavortiesActivity extends AppCompatActivity implements NavigationVi
 
     private void getFavoriteNews() {
         sharedPreference = new SharedPreference(this);
-        ArrayList<News> favoritesArrayList = getSharedPreferences();
-        if (favoritesArrayList == null || favoritesArrayList.size() <= 0) {
-            noNewsTextView.setVisibility(View.VISIBLE);
-            listView.setVisibility(View.GONE);
-        } else {
-            noNewsTextView.setVisibility(View.GONE);
-            listView.setVisibility(View.VISIBLE);
+        ArrayList<News> favoritesArrayList = sharedPreference.getFavorites();
+        if (favoritesArrayList != null && favoritesArrayList.size() > 0) {
+            // favorites is in shared preferences
             setNews(favoritesArrayList);
+
+        } else {
+            sharedPreference.getNewsFromFirebase(new CallBack() {
+                @Override
+                public void onCallback(ArrayList<News> newsArrayList) {
+                    if (newsArrayList == null || newsArrayList.size() <= 0) {
+                        noNewsTextView.setVisibility(View.VISIBLE);
+                        listView.setVisibility(View.GONE);
+                        progressBar.setVisibility(View.GONE);
+                    } else {
+                        setNews(newsArrayList);
+                        //save fav from firebase to shared preferences
+                        sharedPreference.saveFavorites(newsArrayList);
+                    }
+                }
+            });
         }
     }
 
+
     private void setNews(final ArrayList<News> favoritesArrayList) {
+        progressBar.setVisibility(View.GONE);
+        noNewsTextView.setVisibility(View.GONE);
+        listView.setVisibility(View.VISIBLE);
         newsAdapter = new NewsAdapter(this, R.layout.news_item_view, favoritesArrayList);
         listView.setAdapter(newsAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -102,11 +122,6 @@ public class FavortiesActivity extends AppCompatActivity implements NavigationVi
                 startActivity(intent);
             }
         });
-    }
-
-    private ArrayList<News> getSharedPreferences() {
-        ArrayList<News> favoritesArrayList = sharedPreference.getFavorites();
-        return favoritesArrayList;
     }
 
 

@@ -12,11 +12,6 @@
             android:id="@+id/nav_fav"
             android:icon="@drawable/ic_menu_favorite"
             android:title="Favorite News" />
-        <item
-            android:id="@+id/nav_search"
-            android:icon="@drawable/ic_search"
-            android:title="Search" />
-
     </group>
 
     <item android:title="Account">

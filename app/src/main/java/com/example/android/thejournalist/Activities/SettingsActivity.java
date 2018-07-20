@@ -51,7 +51,7 @@ public class SettingsActivity extends AppCompatActivity implements NavigationVie
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        navDrawer = new NavDrawer(this);
+        navDrawer = new NavDrawer(this, navigationView);
 
 
         TextView changeCountryTextView = findViewById(R.id.tv_settings_change_country);
