@@ -1,8 +1,13 @@
 package com.example.android.thejournalist.Activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 import com.example.android.thejournalist.R;
 import com.example.android.thejournalist.Utilites.Helper;
@@ -20,34 +25,29 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_login);
-        /*final TextInputEditText emailEditText=findViewById(R.id.et_email);
 
-         *//*        SharedPreferences sharedPreferences=this.getPreferences(Context.MODE_PRIVATE);
-        final SharedPreferences.Editor editor=sharedPreferences.edit();*//*
+        checkInternetState();
+    }
 
+    private void checkInternetState() {
+        if (isNetworkAvailable())
+            getFirebaseAuth();
+        else {
+            setContentView(R.layout.activity_login);
+            Snackbar.make(getWindow().getDecorView().getRootView(),
+                    "No internet Connection",
+                    Snackbar.LENGTH_INDEFINITE)
+                    .setAction("Retry", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            checkInternetState();
+                        }
+                    })
+                    .show();
+        }
+    }
 
-        Button loginButton=findViewById(R.id.btn_login);
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                email=emailEditText.getText().toString();
-
-                if(isEmailValid(email)){
-                    *//*editor.putString("email",email);
-                    editor.commit();*//*
-                    startActivity(new Intent(LoginActivity.this,HomeActivity.class));
-                    finish();
-                }else{
-                    emailEditText.setError("Wrong email format");
-                }
-            }
-        });*/
-
-//        List<AuthUI.IdpConfig> providers = Arrays.asList(
-//                new AuthUI.IdpConfig.EmailBuilder().build(),
-//                new AuthUI.IdpConfig.GoogleBuilder().build());
-
+    private void getFirebaseAuth() {
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.EmailBuilder().build(),
                 new AuthUI.IdpConfig.GoogleBuilder().build());
@@ -56,13 +56,15 @@ public class LoginActivity extends AppCompatActivity {
                         .createSignInIntentBuilder()
                         .setIsSmartLockEnabled(false)
                         .setAvailableProviders(providers)
-                        .setLogo(R.drawable.ic_action_fav)
                         .build()
                 , RC_SIGN_IN);
     }
 
-    boolean isEmailValid(CharSequence email) {
-        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     @Override

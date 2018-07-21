@@ -92,7 +92,7 @@ public class SearchResultsActivity extends AppCompatActivity implements Navigati
                     listView.setVisibility(View.VISIBLE);
                     setNews(newsArrayList);
                 } else {
-                    noNewsTextView.setText("No search results for \"" + query + "\"");
+                    noNewsTextView.setText(getString(R.string.no_search_reasults_found) + " \"" + query + "\"");
                     noNewsTextView.setVisibility(View.VISIBLE);
                     listView.setVisibility(View.GONE);
                     progressBar.setVisibility(View.GONE);

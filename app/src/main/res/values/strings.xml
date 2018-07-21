@@ -18,5 +18,7 @@
     <string name="title_activity_details">News Details</string>
     <string name="title_web_page_details">News official website</string>
     <string name="title_activity_settings">Account Settings</string>
+    <string name="no_news_in_this_category">No news in this category</string>
+    <string name="no_search_reasults_found">No search results found for</string>
 
 </resources>
