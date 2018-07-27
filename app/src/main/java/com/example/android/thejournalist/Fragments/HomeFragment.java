@@ -188,17 +188,7 @@ public class HomeFragment extends Fragment {
     }*/
 
     private void showCountryDialog() {
-        final ArrayList<Country> countries = new ArrayList<>();
-        countries.add(new Country("Australia", "au", R.drawable.australia));
-        countries.add(new Country("Brazil", "br", R.drawable.brazil));
-        countries.add(new Country("Canada", "ca", R.drawable.canada));
-        countries.add(new Country("China", "cn", R.drawable.china));
-        countries.add(new Country("Egypt", "eg", R.drawable.egypt));
-        countries.add(new Country("France", "fr", R.drawable.france));
-        countries.add(new Country("India", "in", R.drawable.india));
-        countries.add(new Country("Italy", "it", R.drawable.italy));
-        countries.add(new Country("Japan", "jp", R.drawable.japan));
-        countries.add(new Country("USA", "us", R.drawable.united_states_of_america));
+        final ArrayList<Country> countries = Country.getCountriesList();
 
         final CountryAdapter countryAdapter = new CountryAdapter(getContext(), R.layout.country_item_view, countries);
 
