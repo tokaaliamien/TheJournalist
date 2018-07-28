@@ -24,9 +24,8 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include
-        android:id="@+id/container"
-        layout="@layout/fragment_news_list"
+    <FrameLayout
+        android:id="@+id/fragment_favorites"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"

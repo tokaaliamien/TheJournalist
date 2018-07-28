@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.example.android.thejournalist.Fragments.DetailsFragment;
 import com.example.android.thejournalist.Models.News;
 import com.example.android.thejournalist.R;
 
@@ -20,6 +21,21 @@ public class DetailsActivity extends AppCompatActivity {
 
         News news = (News) getIntent().getExtras().get("news");
         //Helper.displayToast(this,news.getId());
+        if (savedInstanceState == null) {
+
+            DetailsFragment detailFragment = new DetailsFragment();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("news", news);
+            detailFragment.setArguments(bundle);
+
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_details, detailFragment)
+                    .commit();
+        }
+
+
+        //News news = (Movie) getIntent().getSerializableExtra("movie");
+
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }

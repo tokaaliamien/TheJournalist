@@ -46,33 +46,36 @@ public class DetailsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        news = (News) getActivity().getIntent().getExtras().get("news");
-
+        //news = (News) getActivity().getIntent().getExtras().get("news");
         View view = inflater.inflate(R.layout.fragment_details, container, false);
 
-        sharedPreference = new SharedPreference(getContext());
-        isFavorite = sharedPreference.isFavorite(news);
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            news = (News) bundle.getSerializable("news");
 
-        descriptionTextView = view.findViewById(R.id.tv_news_details_description);
-        titleTextView = view.findViewById(R.id.tv_news_details_title);
-        dateTextView = view.findViewById(R.id.tv_news_details_date);
-        nameTextView = view.findViewById(R.id.tv_news_details_name);
-        authorTextView = view.findViewById(R.id.tv_news_details_author);
-        fromTextView = view.findViewById(R.id.tv_from);
-        byTextView = view.findViewById(R.id.tv_by);
-        publishedAtTextView = view.findViewById(R.id.tv_published_at);
+            sharedPreference = new SharedPreference(getContext());
+            isFavorite = sharedPreference.isFavorite(news);
 
+            descriptionTextView = view.findViewById(R.id.tv_news_details_description);
+            titleTextView = view.findViewById(R.id.tv_news_details_title);
+            dateTextView = view.findViewById(R.id.tv_news_details_date);
+            nameTextView = view.findViewById(R.id.tv_news_details_name);
+            authorTextView = view.findViewById(R.id.tv_news_details_author);
+            fromTextView = view.findViewById(R.id.tv_from);
+            byTextView = view.findViewById(R.id.tv_by);
+            publishedAtTextView = view.findViewById(R.id.tv_published_at);
 
-        imageView = view.findViewById(R.id.iv_news_details_image);
+            imageView = view.findViewById(R.id.iv_news_details_image);
 
-        linkButton = view.findViewById(R.id.btn_news_details_link);
-        favButton = view.findViewById(R.id.btn_news_details_fav);
-        shareButton = view.findViewById(R.id.btn_news_details_share);
+            linkButton = view.findViewById(R.id.btn_news_details_link);
+            favButton = view.findViewById(R.id.btn_news_details_fav);
+            shareButton = view.findViewById(R.id.btn_news_details_share);
 
+            setNewsData(news);
 
-        setNewsData(news);
-
+        }
         return view;
+
     }
 
     private void setNewsData(final News news) {

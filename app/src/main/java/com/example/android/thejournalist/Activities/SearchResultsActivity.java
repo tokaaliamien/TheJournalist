@@ -3,7 +3,6 @@ package com.example.android.thejournalist.Activities;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,32 +14,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
-import com.example.android.thejournalist.Adapters.NewsAdapter;
-import com.example.android.thejournalist.Models.News;
+import com.example.android.thejournalist.Fragments.SearchResultsFragment;
 import com.example.android.thejournalist.R;
-import com.example.android.thejournalist.Utilites.CallBack;
-import com.example.android.thejournalist.Utilites.Constants;
 import com.example.android.thejournalist.Utilites.NavDrawer;
-import com.example.android.thejournalist.Utilites.VolleyRequest;
-
-import java.util.ArrayList;
 
 public class SearchResultsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-
-    private static final String LOG_TAG = SearchResultsActivity.class.getSimpleName();
-    private VolleyRequest volleyRequest;
-    private ArrayList<News> newsArrayList;
-    private ListView listView;
-    private TextView noNewsTextView;
-    private ProgressBar progressBar;
     private NavDrawer navDrawer;
+    private String query;
 
 
     @Override
@@ -65,70 +47,14 @@ public class SearchResultsActivity extends AppCompatActivity implements Navigati
 
         navDrawer = new NavDrawer(this, navigationView);
 
-
-        listView = findViewById(R.id.lv_news);
-        noNewsTextView = findViewById(R.id.tv_no_news);
-        progressBar = findViewById(R.id.pb_list);
-        progressBar.setVisibility(View.GONE);
-
-        handleIntent(getIntent());
-    }
-
-    private void search(final String query) {
-        progressBar.setVisibility(View.VISIBLE);
-        volleyRequest = new VolleyRequest(SearchResultsActivity.this);
-        Uri uri = Uri.parse(Constants.EVERYTHING_BASE_URL)
-                .buildUpon()
-                .appendQueryParameter(Constants.QUERY_PARAM, query)
-                .appendQueryParameter(Constants.API_KEY_PARAM, Constants.API_KEY)
-                .build();
-
-        volleyRequest.requestData(uri, new CallBack() {
-            @Override
-            public void onCallback(ArrayList<News> resultArrayList) {
-                newsArrayList = resultArrayList;
-                if (newsArrayList != null && newsArrayList.size() > 0) {
-                    noNewsTextView.setVisibility(View.GONE);
-                    listView.setVisibility(View.VISIBLE);
-                    setNews(newsArrayList);
-                } else {
-                    noNewsTextView.setText(getString(R.string.no_search_reasults_found) + " \"" + query + "\"");
-                    noNewsTextView.setVisibility(View.VISIBLE);
-                    listView.setVisibility(View.GONE);
-                    progressBar.setVisibility(View.GONE);
-
-                }
-            }
-        });
-    }
-
-
-    private void setNews(final ArrayList<News> newsArrayList) {
-        progressBar.setVisibility(View.GONE);
-        NewsAdapter newsAdapter = new NewsAdapter(this, R.layout.news_item_view, newsArrayList);
-        listView.setAdapter(newsAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(SearchResultsActivity.this, DetailsActivity.class);
-                intent.putExtra("news", newsArrayList.get(position));
-                startActivity(intent);
-            }
-        });
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        handleIntent(intent);
-    }
-
-    private void handleIntent(Intent intent) {
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            search(query);
-
+        if (savedInstanceState == null) {
+            /*getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_search_results, new SearchResultsFragment())
+                    .commit();*/
+            handleIntent(getIntent());
         }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -147,7 +73,7 @@ public class SearchResultsActivity extends AppCompatActivity implements Navigati
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        volleyRequest.cancelAll();
+        //TODO cancel volley request
     }
 
 
@@ -175,5 +101,27 @@ public class SearchResultsActivity extends AppCompatActivity implements Navigati
         return true;
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            query = intent.getStringExtra(SearchManager.QUERY);
+            Bundle bundle = new Bundle();
+            bundle.putString("query", query);
+            SearchResultsFragment fragment = new SearchResultsFragment();
+            fragment.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.fragment_search_results, fragment)
+                    .commit();
+
+        }
+    }
+
+    public String getQuery() {
+        return query;
+    }
 
 }

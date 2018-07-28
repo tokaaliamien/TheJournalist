@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.android.thejournalist.Activities.FavortiesActivity">
+    tools:context="com.example.android.thejournalist.Activities.SearchResultsActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -26,9 +26,8 @@
     </android.support.design.widget.AppBarLayout>
 
 
-    <include
-        android:id="@+id/container"
-        layout="@layout/fragment_news_list"
+    <FrameLayout
+        android:id="@+id/fragment_search_results"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -21,6 +21,7 @@
 
         <activity
             android:name=".Activities.LoginActivity"
+            android:configChanges="orientation"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,6 +31,7 @@
         </activity>
         <activity
             android:name=".Activities.HomeActivity"
+            android:configChanges="orientation"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -38,10 +40,12 @@
         </activity>
         <activity
             android:name=".Activities.DetailsActivity"
+            android:configChanges="orientation"
             android:label="@string/title_activity_details"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activities.WebPageActivity"
+            android:configChanges="orientation"
             android:label="@string/title_web_page_details"
             android:parentActivityName=".Activities.DetailsActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -51,6 +55,7 @@
         </activity>
         <activity
             android:name=".Activities.FavortiesActivity"
+            android:configChanges="orientation"
             android:label="Favorite News"
             android:parentActivityName=".Activities.HomeActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -60,6 +65,7 @@
         </activity>
         <activity
             android:name=".Activities.SettingsActivity"
+            android:configChanges="orientation"
             android:parentActivityName=".Activities.HomeActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
@@ -68,6 +74,7 @@
         </activity>
         <activity
             android:name=".Activities.SearchResultsActivity"
+            android:configChanges="orientation"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

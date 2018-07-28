@@ -141,14 +141,22 @@ public class HomeFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                /*DetailsFragment detailsFragment=new DetailsFragment();
-                FragmentManager manager = getActivity().getSupportFragmentManager();
-                FragmentTransaction transaction = manager.beginTransaction();
-                transaction.replace(R.id.view_pager, detailsFragment);
-                transaction.commit();*/
-                Intent intent = new Intent(getActivity(), DetailsActivity.class);
-                intent.putExtra("news", newsArrayList.get(position));
-                startActivity(intent);
+
+                if (getActivity().findViewById(R.id.fragment_details) != null) {
+                    getActivity().findViewById(R.id.fragment_details).setVisibility(View.VISIBLE);
+                    DetailsFragment detailFragment = new DetailsFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("news", newsArrayList.get(position));
+                    detailFragment.setArguments(bundle);
+
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_details, detailFragment)
+                            .commit();
+                } else {
+                    Intent intent = new Intent(getActivity(), DetailsActivity.class);
+                    intent.putExtra("news", newsArrayList.get(position));
+                    startActivity(intent);
+                }
             }
         });
     }
